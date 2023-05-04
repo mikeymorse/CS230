@@ -14,31 +14,10 @@ import matplotlib.pyplot as plt
 import altair as alt
 import base64
 
-"""
-This function fixes an error in the original dataframe, where years were recorded wrong
-
-Parameters:
-    dataFrame: the original dataframe
-
-Returns:
-    df: new dataframe with mistakes removed
-"""
-
 
 def fixYear(dataFrame):
     df = dataFrame.drop(dataFrame[dataFrame['year'] > 2023].index, inplace=True)
     return df
-
-
-"""
-This function maps the given dataframe by year. The user filters the data in streamlit using a text input box.
-
-Parameters:
-    dataFrame: the original dataframe
-
-Returns:
-    A map on streamlit, filtered based on user inputs
-"""
 
 
 def mapByYear(dataFrame):
@@ -60,17 +39,6 @@ def mapByYear(dataFrame):
         except:
             st.error("Please enter a valid year")
             st.stop()
-
-
-"""
-This function maps meteorites based on several filters including operators, mass, and quantity desired.
-
-Parameters:
-    dataFrame: the original dataframe
-
-Returns:
-    A map on streamlit, filtered based on user inputs
-"""
 
 
 def mapBySize(dataFrame):
@@ -97,16 +65,14 @@ def mapBySize(dataFrame):
         st.map(df_map, zoom=0)
 
 
-"""
-This function filters the dataframe based on a set number of entries desired. Default is 100.
+# This function filters the dataframe based on a set number of entries desired. Default is 100.
 
-Parameters:
-    dataFrame: the original dataframe
-    num: number of entries desired, default is 100
+# Parameters:
+    # dataFrame: the original dataframe
+    # num: number of entries desired, default is 100
 
-Returns:
-    The sorted dataframe
-"""
+# Returns:
+    # The sorted dataframe
 
 
 def mapLargestN(dataFrame, num=100):
@@ -114,15 +80,13 @@ def mapLargestN(dataFrame, num=100):
     return df_sorted.head(num)
 
 
-"""
-This function graphs meteorite records in a histogram, based on a date range
+# This function graphs meteorite records in a histogram, based on a date range
 
-Parameters:
-    dataFrame: the original dataframe
+# Parameters:
+    # dataFrame: the original dataframe
 
-Returns:
-    A histogram of meteorite records from the date range
-"""
+# Returns:
+    # A histogram of meteorite records from the date range
 
 
 def graphByYear(dataFrame):
@@ -141,17 +105,6 @@ def graphByYear(dataFrame):
     st.pyplot(fig)
 
 
-"""
-This function creates a bar graph based on user-selected meteorite classifications
-
-Parameters:
-    dataFrame: the original dataframe
-
-Returns:
-    A bar graph of meteorites by classes selected
-"""
-
-
 def barByClass(dataFrame):
     grouped_df = dataFrame.groupby('recclass')
     recclass_list = grouped_df.groups.keys()
@@ -164,46 +117,18 @@ def barByClass(dataFrame):
     st.altair_chart(chart, use_container_width=True)
 
 
-"""
-This function creates a pie chart based on user-selected meteorite classifications
-
-Parameters:
-    dataFrame: the original dataframe
-
-Returns:
-    A pie chart of meteorites by classes selected
-"""
-
-
 def pieByClass(dataFrame):
     counts = dataFrame.groupby('recclass')['name'].count()
-
     classifications = counts.index.tolist()
     selected_class = st.multiselect('Select one or more classifications', classifications)
-
     filtered_data = dataFrame[dataFrame['recclass'].isin(selected_class)]
-
     counts_selected = filtered_data.groupby('recclass')['name'].count()
-
     total_falls = dataFrame['name'].count()
     percent_selected = counts_selected / total_falls * 100
-
     fig, ax = plt.subplots()
     ax.pie(percent_selected, labels=percent_selected.index, autopct='%1.1f%%')
     ax.set_title('Proportion of Meteorite Falls by Classification')
-
     st.pyplot(fig)
-
-
-"""
-This function allows the user to explore the raw data similar to how one would use a pivot table in excel
-
-Parameters:
-    dataFrame: the original dataframe
-
-Returns:
-    A table with the selected columns and values
-"""
 
 
 def exploreRawData(dataFrame):
@@ -223,14 +148,6 @@ def exploreRawData(dataFrame):
         index=4)
     pivot = pd.pivot_table(df, index=columns, values=values)
     st.write(pivot)
-
-
-"""
-This function creates a header that helps users understand the meteorite classifications
-
-Returns:
-    Image from NASA, if the user selects the checkbox
-"""
 
 
 def graphsHeader():
